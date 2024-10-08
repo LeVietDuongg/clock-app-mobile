@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.application")
 }
+
 
 android {
     namespace = "com.example.donghocuatoi"
