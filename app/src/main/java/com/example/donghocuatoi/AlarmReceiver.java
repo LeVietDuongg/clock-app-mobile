@@ -13,47 +13,25 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    private static Ringtone ringtone; // Static để duy trì trạng thái của ringtone giữa các lần phát
-
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Kiểm tra xem có phải yêu cầu dừng chuông không
-        if (intent.getAction() != null && intent.getAction().equals("STOP_ALARM")) {
-            stopAlarm(); // Gọi phương thức dừng chuông
-            return; // Thoát nếu nhận lệnh dừng chuông
-        }
-
-        // Sử dụng vibrator để rung thiết bị
+        // TODO: This method is called when the BroadcastReceiver is receiving
+        // an Intent broadcast.
+        // we will use vibrator first
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibrator != null && vibrator.hasVibrator()) {
-            vibrator.vibrate(4000);  // Rung trong 4 giây
-        }
+        vibrator.vibrate(4000);
 
-        // Hiển thị thông báo Toast
         Toast.makeText(context, "Alarm! Wake up! Wake up!", Toast.LENGTH_LONG).show();
-
-        // Lấy URI âm báo
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
 
-        // Phát âm báo
-        if (ringtone == null) {
-            ringtone = RingtoneManager.getRingtone(context, alarmUri);
-        }
+        // setting default ringtone
+        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
 
-        if (ringtone != null && !ringtone.isPlaying()) {
-            ringtone.play();
-        }
-    }
-
-    // Hàm dừng âm báo
-    public void stopAlarm() {
-        if (ringtone != null && ringtone.isPlaying()) {
-            ringtone.stop();
-            ringtone = null; // Giải phóng ringtone sau khi dừng
-        }
+        // play ringtone
+        ringtone.play();
     }
 }

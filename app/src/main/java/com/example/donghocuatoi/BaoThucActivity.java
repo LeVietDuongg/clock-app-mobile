@@ -49,49 +49,32 @@ public class BaoThucActivity extends AppCompatActivity {
         ToggleButton mytoggleButton = (ToggleButton) view;
         long time;
         if (mytoggleButton.isChecked()) {
-            // tạo toast khi bật báo thức
+            // tao toast khi bat bao thuc
             Toast.makeText(this, "Bật báo thức", Toast.LENGTH_SHORT).show();
-
-            // lấy thời gian hiện tại
+            // getting current time
             Calendar mycalendar = Calendar.getInstance();
             mycalendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getHour());
             mycalendar.set(Calendar.MINUTE, alarmTimePicker.getMinute());
-
-            // tạo một intent để kích hoạt BroadcastReceiver (AlarmReceiver)
+            // create a pending intent
             Intent intent = new Intent(this, AlarmReceiver.class);
-
-            // Tạo requestCode duy nhất dựa trên thời gian của báo thức
-            int requestCode = (int) mycalendar.getTimeInMillis();
-
-            // Tạo một PendingIntent với requestCode duy nhất
-            pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
-
+            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
             // tính thời gian báo thức ở dạng mili giây
             time = mycalendar.getTimeInMillis();
-
             // kiểm tra thời gian hiện tại của hệ thống có lớn hơn thời gian báo thức hay không
             if (System.currentTimeMillis() > time) {
-                // nếu báo thức đã qua, đặt lại vào hôm sau
-                time += 1000 * 60 * 60 * 24;
+                //chỉnh thời gian dựa trên am hay pm
+                if (mycalendar.get(Calendar.AM_PM) == Calendar.AM) {
+                    time += 1000 * 60 * 60 * 12;
+                } else {
+                    time += 1000 * 60 * 60 * 24;
+                }
             }
-
-            // đặt báo thức lặp lại
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
         } else {
-            // Tắt báo thức với requestCode duy nhất
+            // tao toast khi tat bao thuc
             Toast.makeText(this, "Tắt báo thức", Toast.LENGTH_LONG).show();
-
-            // Tìm requestCode duy nhất từ thời gian báo thức
-            Calendar mycalendar = Calendar.getInstance();
-            mycalendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getHour());
-            mycalendar.set(Calendar.MINUTE, alarmTimePicker.getMinute());
-            int requestCode = (int) mycalendar.getTimeInMillis();
-
-            // Hủy bỏ báo thức
-            pendingIntent = PendingIntent.getBroadcast(this, requestCode, new Intent(this, AlarmReceiver.class), PendingIntent.FLAG_IMMUTABLE);
             alarmManager.cancel(pendingIntent);
         }
     }
-
 
 }

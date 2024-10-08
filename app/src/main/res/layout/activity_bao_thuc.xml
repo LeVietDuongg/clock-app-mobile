@@ -9,16 +9,10 @@
     tools:context=".BaoThucActivity"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/alarmListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <TimePicker
         android:id="@+id/alarmTimePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
     <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_width="match_parent"
@@ -27,7 +21,7 @@
         android:layout_margin="20dp"
         android:checked="false"
         android:onClick="onToggleClicked"
-        android:text="bật báo thức" />
+        android:text="bật báo thức"/>
     <Button
         android:layout_gravity="center"
         android:id="@+id/btnback"
